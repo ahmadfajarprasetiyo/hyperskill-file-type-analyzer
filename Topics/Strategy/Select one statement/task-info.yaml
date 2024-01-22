@@ -1,0 +1,28 @@
+type: choice
+is_multiple_choice: false
+options:
+  - text: The context delegates execution to the client.
+  - text: A strategy cannot have multiple methods.
+  - text: It isolates the code of algorithms from clients.
+  - text: It reduces the number of classes in a program.
+files:
+  - name: src/Task.java
+    visible: true
+    text: |
+      // You can experiment here, it won’t be checked
+      
+      public class Task {
+        public static void main(String[] args) {
+          // put your code here
+        }
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/3317#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Mon, 22 Jan 2024 13:37:19 UTC"
+record: -1
+selected_options:
+  - 2
+local_check: false
