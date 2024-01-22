@@ -178,6 +178,21 @@ files:
           }
       }
     learner_created: false
+  - name: src/analyzer/StringMatching.java
+    visible: true
+    learner_created: true
+  - name: src/analyzer/KMPAlgorithm.java
+    visible: true
+    learner_created: true
+  - name: src/analyzer/NaiveAlgorithm.java
+    visible: true
+    learner_created: true
+  - name: src/analyzer/FindingSubString.java
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/5486#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Mon, 22 Jan 2024 23:36:18 UTC"
 record: -1
