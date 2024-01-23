@@ -1,0 +1,29 @@
+type: choice
+is_multiple_choice: false
+options:
+  - text: obtain nothing because the executor will send us the result through a callback
+      in future
+  - text: "receive an exception, because using <b>Callable</b> is outdated"
+  - text: immediately obtain the result of the task
+  - text: obtain an object that wraps the result
+files:
+  - name: src/Task.java
+    visible: true
+    text: |
+      // You can experiment here, it won’t be checked
+      
+      public class Task {
+        public static void main(String[] args) {
+          // put your code here
+        }
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/4908#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Tue, 23 Jan 2024 00:17:23 UTC"
+record: -1
+selected_options:
+  - 3
+local_check: false

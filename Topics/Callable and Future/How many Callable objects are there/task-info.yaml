@@ -1,0 +1,25 @@
+type: code
+custom_name: How many Callable objects are there?
+files:
+  - name: src/Main.java
+    visible: true
+    highlight_level: NONE
+    text: |-
+      import java.util.concurrent.*;
+      
+      
+      class FutureUtils {
+      
+          public static int determineCallableDepth(Callable callable) throws Exception {
+              // write your code here
+          }
+      
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/4946#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Tue, 23 Jan 2024 00:28:17 UTC"
+record: -1
+submission_language: java17
