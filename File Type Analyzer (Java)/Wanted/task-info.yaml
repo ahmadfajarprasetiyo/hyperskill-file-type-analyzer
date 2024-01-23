@@ -183,6 +183,139 @@ files:
     
       }
     learner_created: false
+  - name: src/analyzer/StringMatching.java
+    visible: true
+    text: |
+      package analyzer;
+      
+      interface StringMatching {
+          int getIndex(String fullText, String subString);
+      }
+    learner_created: true
+  - name: src/analyzer/KMPAlgorithm.java
+    visible: true
+    text: |
+      package analyzer;
+      
+      public class KMPAlgorithm implements StringMatching {
+          public int getIndex(String fullText, String subString) {
+              int res = -1;
+              int M = subString.length();
+              int N = fullText.length();
+      
+              int[] lps = new int[M];
+      
+              computeLPSArray(subString, M, lps);
+      
+              int j = 0;
+              int i = 0;
+              while (i < N) {
+                  if (subString.charAt(j) == fullText.charAt(i)) {
+                      j++;
+                      i++;
+                  }
+      
+                  if (j == M) {
+                      res = i - j;
+                      break;
+                  } else if (i < N && subString.charAt(j) != fullText.charAt(i)) {
+                      if (j != 0) {
+                          j = lps[j - 1];
+                      } else {
+                          i = i + 1;
+                      }
+      
+                  }
+              }
+      
+              return res;
+          }
+      
+          private void computeLPSArray(String pat, int M, int lps[]) {
+      
+              int len = 0;
+              int i = 1;
+              lps[0] = 0;
+      
+      
+              while (i < M) {
+                  if (pat.charAt(i) == pat.charAt(len)) {
+                      len++;
+                      lps[i] = len;
+                      i++;
+                  } else {
+                      if (len != 0) {
+                          len = lps[len - 1];
+                      } else {
+                          lps[i] = len;
+                          i++;
+                      }
+                  }
+              }
+          }
+      }
+    learner_created: true
+  - name: src/analyzer/NaiveAlgorithm.java
+    visible: true
+    text: |
+      package analyzer;
+      
+      public class NaiveAlgorithm implements StringMatching {
+          public int getIndex(String fullText, String subString) {
+              int res = -1;
+              int M = subString.length();
+              int N = fullText.length();
+      
+              int j = 0;
+              int i = 0;
+              int firstMatch = 0;
+              while (i < N) {
+                  if (subString.charAt(j) == fullText.charAt(i)) {
+                      if (j == 0) {
+                          firstMatch = i;
+                      }
+                      j++;
+                      i++;
+                  }
+      
+                  if (j == M) {
+                      res = i - j;
+                      break;
+                  } else if (i < N && subString.charAt(j) != fullText.charAt(i)) {
+                      if (j != 0) {
+                          i = firstMatch + 1;
+                          j = 0;
+                      } else {
+                          i = i + 1;
+                      }
+      
+                  }
+              }
+      
+              return res;
+          }
+      }
+    learner_created: true
+  - name: src/analyzer/FindingSubString.java
+    visible: true
+    text: |
+      package analyzer;
+      
+      public class FindingSubString {
+          final private StringMatching stringMatching;
+      
+          FindingSubString(StringMatching stringMatching) {
+              this.stringMatching = stringMatching;
+          }
+      
+          public int getIndexSubString(String fullText, String subString) {
+              return this.stringMatching.getIndex(fullText, subString);
+          }
+      }
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/5487#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Tue, 23 Jan 2024 02:02:01 UTC"
 record: -1

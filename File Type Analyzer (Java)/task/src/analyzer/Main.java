@@ -1,53 +1,44 @@
 package analyzer;
 
-import java.io.IOException;
-import java.lang.module.FindException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class Main {
     public static void main(String[] args) {
 
-        final String NAIVE_ALGORITHM = "--naive";
-        final String KMP_ALGORITHM = "--KMP";
+        String rootFolder = args[0];
+        String patternFile = args[1];
+        String outputString = args[2];
 
-        String algorithm = args[0];
-        String inputFile = args[1];
-        String patternFile = args[2];
-        String outputString = args[3];
+        List<Callable<String>> callables = new ArrayList<>();
 
+        FindingSubString findingSubString = new FindingSubString(new KMPAlgorithm());
 
-        FindingSubString findingSubString;
+        File folder = new File(rootFolder);
+        File[] listOfFiles = folder.listFiles();
 
-        if (algorithm.equals(NAIVE_ALGORITHM)) {
-            findingSubString = new FindingSubString(new NaiveAlgorithm());
-        } else {
-            findingSubString = new FindingSubString(new KMPAlgorithm());
-        }
-
-
-
-        try {
-            long startTime = System.nanoTime();
-
-            String allBytes = Files.readString(Paths.get(inputFile));
-            System.out.println(allBytes);
-
-            if (findingSubString.getIndexSubString(allBytes, patternFile) != -1) {
-                System.out.println(outputString);
-            } else {
-                System.out.println("Unknown file type");
+        if (listOfFiles != null) {
+            ExecutorService executor = Executors.newFixedThreadPool(listOfFiles.length);
+            for (File file : listOfFiles) {
+                if (file.isFile()) {
+                    Callable<String> callable = () -> findingSubString.checkFileType(rootFolder, file.getName(), patternFile, outputString);
+                    callables.add(callable);
+                }
             }
 
-            long elapsedNanos = System.nanoTime() - startTime;
+            try {
+                List<Future<String>> futures = executor.invokeAll(callables);
+                for (Future<String> future : futures) {
+                    System.out.println(future.get());
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                System.out.println(ex.toString());
+            }
 
-            System.out.printf("It took %f seconds", elapsedNanos/1000000000.0);
-
-
-        } catch (IOException ex) {
-            System.out.println(ex.toString());
         }
+
+
     }
 }
