@@ -293,6 +293,202 @@ files:
     
       }
     learner_created: false
+  - name: src/analyzer/StringMatching.java
+    visible: true
+    text: |
+      package analyzer;
+      
+      interface StringMatching {
+          int getIndex(String fullText, String subString);
+      }
+    learner_created: true
+  - name: src/analyzer/KMPAlgorithm.java
+    visible: true
+    text: |
+      package analyzer;
+      
+      public class KMPAlgorithm implements StringMatching {
+          public int getIndex(String fullText, String subString) {
+              int res = -1;
+              int M = subString.length();
+              int N = fullText.length();
+      
+              int[] lps = new int[M];
+      
+              computeLPSArray(subString, M, lps);
+      
+              int j = 0;
+              int i = 0;
+              while (i < N) {
+                  if (subString.charAt(j) == fullText.charAt(i)) {
+                      j++;
+                      i++;
+                  }
+      
+                  if (j == M) {
+                      res = i - j;
+                      break;
+                  } else if (i < N && subString.charAt(j) != fullText.charAt(i)) {
+                      if (j != 0) {
+                          j = lps[j - 1];
+                      } else {
+                          i = i + 1;
+                      }
+      
+                  }
+              }
+      
+              return res;
+          }
+      
+          private void computeLPSArray(String pat, int M, int lps[]) {
+      
+              int len = 0;
+              int i = 1;
+              lps[0] = 0;
+      
+      
+              while (i < M) {
+                  if (pat.charAt(i) == pat.charAt(len)) {
+                      len++;
+                      lps[i] = len;
+                      i++;
+                  } else {
+                      if (len != 0) {
+                          len = lps[len - 1];
+                      } else {
+                          lps[i] = len;
+                          i++;
+                      }
+                  }
+              }
+          }
+      }
+    learner_created: true
+  - name: src/analyzer/PatternFile.java
+    visible: true
+    text: |
+      package analyzer;
+      
+      public class PatternFile implements Comparable<PatternFile> {
+          private final int priority;
+          private final String pattern;
+          private final String fileType;
+      
+          PatternFile(int priority, String pattern, String fileType) {
+              this.priority = priority;
+              this.pattern = pattern;
+              this.fileType = fileType;
+          }
+      
+          public String getPattern() {
+              return pattern;
+          }
+      
+          public String getFileType() {
+              return fileType;
+          }
+      
+          @Override
+          public int compareTo(PatternFile other) {
+              // Compare books based on their publication year
+              return Integer.compare(this.priority, other.priority);
+          }
+      
+      
+      }
+    learner_created: true
+  - name: src/analyzer/NaiveAlgorithm.java
+    visible: true
+    text: |
+      package analyzer;
+      
+      public class NaiveAlgorithm implements StringMatching {
+          public int getIndex(String fullText, String subString) {
+              int res = -1;
+              int M = subString.length();
+              int N = fullText.length();
+      
+              int j = 0;
+              int i = 0;
+              int firstMatch = 0;
+              while (i < N) {
+                  if (subString.charAt(j) == fullText.charAt(i)) {
+                      if (j == 0) {
+                          firstMatch = i;
+                      }
+                      j++;
+                      i++;
+                  }
+      
+                  if (j == M) {
+                      res = i - j;
+                      break;
+                  } else if (i < N && subString.charAt(j) != fullText.charAt(i)) {
+                      if (j != 0) {
+                          i = firstMatch + 1;
+                          j = 0;
+                      } else {
+                          i = i + 1;
+                      }
+      
+                  }
+              }
+      
+              return res;
+          }
+      }
+    learner_created: true
+  - name: src/analyzer/FindingSubString.java
+    visible: true
+    text: |
+      package analyzer;
+      
+      import java.io.IOException;
+      import java.nio.file.Files;
+      import java.nio.file.Paths;
+      import java.util.List;
+      
+      public class FindingSubString {
+          final private StringMatching stringMatching;
+      
+          FindingSubString(StringMatching stringMatching) {
+              this.stringMatching = stringMatching;
+          }
+      
+          public int getIndexSubString(String fullText, String subString) {
+              return this.stringMatching.getIndex(fullText, subString);
+          }
+      
+          public String checkFileType(String folderPath, String nameFile, List<PatternFile> patternFileList) {
+              String res = nameFile + ": Unknown file type";
+              try {
+                  String allBytes = Files.readString(Paths.get(folderPath+"/"+nameFile));
+      
+                  for (PatternFile patternFile : patternFileList) {
+                      if (this.getIndexSubString(allBytes, patternFile.getPattern()) != -1) {
+                          res = nameFile + ": " + patternFile.getFileType();
+                          break;
+                      }
+                  }
+      
+      
+              } catch (IOException ex) {
+                  System.out.println(ex.toString());
+              }
+      
+              return res;
+          }
+      
+      }
+    learner_created: true
+  - name: src/analyzer/RabinKarpAlgorithm.java
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/5489#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">Hyperskill</a>
+    to continue learning.
+  time: "Tue, 23 Jan 2024 14:49:19 UTC"
 record: -1
